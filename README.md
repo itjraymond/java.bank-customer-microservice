@@ -34,7 +34,7 @@ Once I have done that, I can run a MongoDB image without any additional configur
 itjraymond $ docker run -d -p 27017:27017 -v /Users/jraymond/data/mongodb:/data/db --name bank-customer-api mongo 
 ```
 
-We can stop this docker image with:
+We can stop this docker running-image with:
 
 ```css
 itjraymond $ docker stop bank-customer-api
@@ -46,7 +46,7 @@ And we can re-start our image with:
 itjraymond $ docker start bank-customer-api
 ```
 
-## Spring Boot _`customer-api`_
+## Spring Boot _`bank-customer-api`_ and _`bank-customer-client`_
 
 I used [Spring Initializr](https://start.spring.io/) to create both gradle sub-project and unzipped each sub-project
 (_`bank-customer-api`_ and _`bank-customer-client`_) at the root level.  After removing the zip files, our 
@@ -70,4 +70,33 @@ drwxr-xr-x   3 jraymond  staff    96 21 Nov 17:28 gradle
 -rw-r--r--   1 jraymond  staff  2763 21 Nov 17:28 gradlew.bat
 -rw-r--r--   1 jraymond  staff   435 21 Nov 17:28 settings.gradle
 
+```
+
+We can then try to run the basic default application.  Make sure we are running MongoDB in our Docker container.
+
+```js
+itjraymond $ ./gradlew :bank-customer-api:bootRun
+
+> Task :bank-customer-api:bootRun
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::        (v2.3.5.RELEASE)
+
+2020-11-24 09:58:57.228  INFO 7359 --- [  restartedMain] c.j.b.c.CustomerApiApplication           : Starting CustomerApiApplication on snappi.hitronhub.home with PID 7359 (/Users/jraymond/workspaces/java/java.bank-customer-microservice/bank-customer-api/build/classes/java/main started by jraymond in /Users/jraymond/workspaces/java/java.bank-customer-microservice/bank-customer-api)
+2020-11-24 09:58:57.230  INFO 7359 --- [  restartedMain] c.j.b.c.CustomerApiApplication           : No active profile set, falling back to default profiles: default
+2020-11-24 09:58:57.266  INFO 7359 --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2020-11-24 09:58:57.266  INFO 7359 --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2020-11-24 09:58:57.618  INFO 7359 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Reactive MongoDB repositories in DEFAULT mode.
+2020-11-24 09:58:57.634  INFO 7359 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 12ms. Found 0 Reactive MongoDB repository interfaces.
+2020-11-24 09:58:58.130  INFO 7359 --- [  restartedMain] org.mongodb.driver.cluster               : Cluster created with settings {hosts=[localhost:27017], mode=SINGLE, requiredClusterType=UNKNOWN, serverSelectionTimeout='30000 ms'}
+2020-11-24 09:58:58.290  INFO 7359 --- [localhost:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:1, serverValue:3}] to localhost:27017
+2020-11-24 09:58:58.296  INFO 7359 --- [localhost:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=9, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=5344686}
+2020-11-24 09:58:58.326  INFO 7359 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2020-11-24 09:58:58.367  INFO 7359 --- [  restartedMain] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port(s): 8080
+2020-11-24 09:58:58.377  INFO 7359 --- [  restartedMain] c.j.b.c.CustomerApiApplication           : Started CustomerApiApplication in 1.67 seconds (JVM running for 2.051)
 ```
