@@ -3,6 +3,7 @@ package ca.jent.bank.customerapi.controllers;
 import ca.jent.bank.customerapi.data.Customer;
 import ca.jent.bank.customerapi.services.CustomerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,5 +39,10 @@ public class CustomerController {
     @PostMapping()
     Mono<Customer> insertCustomer(@RequestBody Customer customer) {
         return customerService.saveCustomer(customer);
+    }
+
+    @DeleteMapping("/{id}")
+    Mono<Void> deleteCustomer(@PathVariable String id) {
+        return  customerService.deleteCustomer(id);
     }
 }

@@ -49,7 +49,8 @@ itjraymond $ docker start bank-customer-api
 ## Spring Boot _`bank-customer-api`_ and _`bank-customer-client`_
 
 I used [Spring Initializr](https://start.spring.io/) to create both gradle sub-project and unzipped each sub-project
-(_`bank-customer-api`_ and _`bank-customer-client`_) at the root level.  After removing the zip files, our 
+(_`bank-customer-api`_ and _`bank-customer-client`_) at the root level.  We choose _Spring Reactive Web_ because 
+ with microservices we want to avoid blocking IO. After removing the zip files, our 
 multi-project structure look like:
 
 ```css
@@ -99,4 +100,69 @@ itjraymond $ ./gradlew :bank-customer-api:bootRun
 2020-11-24 09:58:58.326  INFO 7359 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
 2020-11-24 09:58:58.367  INFO 7359 --- [  restartedMain] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port(s): 8080
 2020-11-24 09:58:58.377  INFO 7359 --- [  restartedMain] c.j.b.c.CustomerApiApplication           : Started CustomerApiApplication in 1.67 seconds (JVM running for 2.051)
+```
+
+## Curl testing
+
+After the`bank-customer-api` has been implemented (see source code) we can test
+with few curl commands.
+
+#### Get all the customers
+
+```css
+itjraymond $ curl http://localhost:8080/customers/ | python -m json.tool
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   365    0   365    0     0  20277      0 --:--:-- --:--:-- --:--:-- 20277
+[
+    {
+        "dob": "1970-08-17",
+        "firstname": "Bob",
+        "id": "5fbd893a6125c772d0e03355",
+        "lastname": "Cruz"
+    },
+    {
+        "dob": "1962-07-09",
+        "firstname": "Tim",
+        "id": "5fbd893a6125c772d0e03356",
+        "lastname": "Bazz"
+    },
+    {
+        "dob": "1967-12-25",
+        "firstname": "Santa",
+        "id": "5fbd893a6125c772d0e03357",
+        "lastname": "Claus"
+    }
+]
+```
+
+#### Get one specific customer (by id)
+
+```css
+itjraymond $ curl http://localhost:8080/customers/5fbd893a6125c772d0e03356 | python -m json.tool
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100    88  100    88    0     0   2378      0 --:--:-- --:--:-- --:--:--  2378
+{
+    "dob": "1962-07-09",
+    "firstname": "Tim",
+    "id": "5fbd893a6125c772d0e03356",
+    "lastname": "Bazz"
+}
+```
+
+#### Insert a new customer
+
+```css
+curl -d '{"id": null, "firstname": "Jimmy", "lastname": "Fortran", "dob": "1999-10-23"}' \
+-H 'Content-Type: application/json' \
+http://localhost:8080/customers/
+
+> {"id":"5fbd8ab36125c772d0e03358","firstname":"Jimmy","lastname":"Fortran","dob":"1999-10-23"}
+```
+
+#### Delete exsiting customer
+
+```css
+itjraymond $ curl -X DELETE http://localhost:8080/customers/5fbd8ab36125c772d0e03358
 ```
