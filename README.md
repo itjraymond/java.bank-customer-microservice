@@ -31,30 +31,30 @@ desire to keep our data between restart.  To that end, I created a local folder 
 Once I have done that, I can run a MongoDB image without any additional configuration.
 
 ```css
-itjraymond $ docker run -d -p 27017:27017 -v /Users/jraymond/data/mongodb:/data/db --name bank-customer-api mongo 
+$ docker run -d -p 27017:27017 -v /Users/jraymond/data/mongodb:/data/db --name bank-customer-api mongo 
 ```
 
 We can stop this docker running-image with:
 
 ```css
-itjraymond $ docker stop bank-customer-api
+$ docker stop bank-customer-api
 ```
 
 And we can re-start our image with:
 
 ```css
-itjraymond $ docker start bank-customer-api
+$ docker start bank-customer-api
 ```
 
 ## Spring Boot _`bank-customer-api`_ and _`bank-customer-client`_
 
-I used [Spring Initializr](https://start.spring.io/) to create both gradle sub-project and unzipped each sub-project
+I used [Spring Initializr](https://start.spring.io/) to create both gradle sub-projects and unzipped each sub-project
 (_`bank-customer-api`_ and _`bank-customer-client`_) at the root level.  We choose _Spring Reactive Web_ because 
  with microservices we want to avoid blocking IO. After removing the zip files, our 
 multi-project structure look like:
 
 ```css
-itjraymond $ ls -la
+$ ls -la
 total 56
 drwxr-xr-x  14 jraymond  staff   448 23 Nov 12:02 .
 drwxr-xr-x  20 jraymond  staff   640 22 Nov 11:00 ..
@@ -76,7 +76,7 @@ drwxr-xr-x   3 jraymond  staff    96 21 Nov 17:28 gradle
 We can then try to run the basic default application.  Make sure we are running MongoDB in our Docker container.
 
 ```js
-itjraymond $ ./gradlew :bank-customer-api:bootRun
+$ ./gradlew :bank-customer-api:bootRun
 
 > Task :bank-customer-api:bootRun
 
@@ -110,10 +110,8 @@ with few curl commands.
 #### Get all the customers
 
 ```css
-itjraymond $ curl http://localhost:8080/customers/ | python -m json.tool
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-100   365    0   365    0     0  20277      0 --:--:-- --:--:-- --:--:-- 20277
+$ curl http://localhost:8080/customers/ | python -m json.tool
+
 [
     {
         "dob": "1970-08-17",
@@ -139,10 +137,8 @@ itjraymond $ curl http://localhost:8080/customers/ | python -m json.tool
 #### Get one specific customer (by id)
 
 ```css
-itjraymond $ curl http://localhost:8080/customers/5fbd893a6125c772d0e03356 | python -m json.tool
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-100    88  100    88    0     0   2378      0 --:--:-- --:--:-- --:--:--  2378
+$ curl http://localhost:8080/customers/5fbd893a6125c772d0e03356 | python -m json.tool
+
 {
     "dob": "1962-07-09",
     "firstname": "Tim",
@@ -161,8 +157,18 @@ http://localhost:8080/customers/
 > {"id":"5fbd8ab36125c772d0e03358","firstname":"Jimmy","lastname":"Fortran","dob":"1999-10-23"}
 ```
 
+#### Update an existing customer
+
+```css
+$ curl -d '{"id": "5fbd8ab36125c772d0e03358", "firstname": "Jammy", "lastname": "Fortrain", "dob": "1999-10-23"}' \
+-H 'Content-Type: application/json' \
+-X PUT http://localhost:8080/customers/55fbd8ab36125c772d0e03358
+
+> {"id":"5fbd8ab36125c772d0e03358","firstname":"Jammy","lastname":"Fortrain","dob":"1999-10-23"}
+```
+
 #### Delete exsiting customer
 
 ```css
-itjraymond $ curl -X DELETE http://localhost:8080/customers/5fbd8ab36125c772d0e03358
+$ curl -X DELETE http://localhost:8080/customers/5fbd8ab36125c772d0e03358
 ```
