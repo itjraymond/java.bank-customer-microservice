@@ -150,7 +150,7 @@ $ curl http://localhost:8080/customers/5fbd893a6125c772d0e03356 | python -m json
 #### Insert a new customer
 
 ```css
-curl -d '{"id": null, "firstname": "Jimmy", "lastname": "Fortran", "dob": "1999-10-23"}' \
+$ curl -d '{"id": null, "firstname": "Jimmy", "lastname": "Fortran", "dob": "1999-10-23"}' \
 -H 'Content-Type: application/json' \
 http://localhost:8080/customers/
 
