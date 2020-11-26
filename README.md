@@ -172,4 +172,10 @@ $ curl -d '{"id": "5fbd8ab36125c772d0e03358", "firstname": "Jammy", "lastname": 
 ```css
 $ curl -X DELETE http://localhost:8080/customers/5fbd8ab36125c772d0e03358
 ```
-The code base for the above can be retrieve by checking out `code_base_01` branch.
+_The code base for the above can be retrieve by checking out `code_base_01` branch._
+
+In addition to exposing functionality using the familiar annotations, such as `@GetMapping`, the same functionalities 
+were exposed using the `RouterFunction` (see `CustmerRouter` class in source code).  
+
+_The addition functional endpoints' implementation can be retrieve by checking out `code_base_02` branch._
+
